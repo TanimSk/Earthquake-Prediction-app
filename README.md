@@ -1,5 +1,5 @@
 # Earthquake-Prediction-app
-An Earthquake Prediction App based on [https://www.arcjournals.org/pdfs/ijarps/v6-i3/6.pdf](https://www.arcjournals.org/pdfs/ijarps/v6-i3/6.pdf) research
+This app is based on [https://www.arcjournals.org/pdfs/ijarps/v6-i3/6.pdf](https://www.arcjournals.org/pdfs/ijarps/v6-i3/6.pdf) research
 
 This App has:
 - Notification System
