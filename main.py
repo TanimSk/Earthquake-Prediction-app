@@ -203,27 +203,33 @@ class MainApp(MDApp):
         data_frame = csv.reader(
             open('./files/records.csv', "r"), delimiter=",")
 
-        Day = str(int(value.strftime('%d'))-self.store.get('data')['Time'])
 
-        new_date = f"{value.strftime('%Y-%m')}-{Day.zfill(2)}"
+        if value:
 
-        value = value.strftime("%Y-%m-%d")
+            Day = str(int(value.strftime('%d'))-self.store.get('data')['Time'])
+
+            new_date = f"{value.strftime('%Y-%m')}-{Day.zfill(2)}"
+
+            value = value.strftime("%Y-%m-%d")
+
+            for row in data_frame:
+                if new_date == row[0]:
+                    minor_ratings = row[1]
+                    severe_ratings = row[2]
+                    break
+
+        else:
+            value = "Wrong Date Selected"
 
         minor_ratings = ""
         severe_ratings = ""
-
-        for row in data_frame:
-            if new_date == row[0]:
-                minor_ratings = row[1]
-                severe_ratings = row[2]
-                break
-
+        
         self.selected_date.text = f"[size=15sp]Date Selected[/size]\n[size=25sp]{value}[/size]"
 
         if minor_ratings != "":
             self.minor_rating_label.text = f"[size=15sp]In this date, the highest\nEarthquake can be of magnitude:[/size]\n\n[size=35sp]{minor_ratings}[/size]"
         else:
-            self.minor_rating_label.text = "Not Found"
+            self.minor_rating_label.text = "[size=25sp]\nNot Found[/size]"
 
         if severe_ratings != "":
             self.severe_rating_label.text = f"[size=15sp] Less then 10% chance [/size]\n {severe_ratings} "
@@ -453,7 +459,7 @@ class MainApp(MDApp):
         date = int(date)
         
         dateBD = int(datetime.now(timezone('UTC')).astimezone(
-            timezone('Asia/Dhaka')).strftime("%d")) 
+            timezone('Europe/London')).strftime("%d")) 
         
         delta = dateBD - date
 
