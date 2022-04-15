@@ -1,9 +1,9 @@
-from kivymd.uix.button.button import MDFillRoundFlatIconButton, MDFillRoundFlatButton, MDIconButton, MDRectangleFlatIconButton
-from kivymd.uix.list.list import OneLineIconListItem as ListItem
+from kivymd.uix.button import MDFillRoundFlatIconButton, MDFillRoundFlatButton, MDIconButton, MDRectangleFlatIconButton
+from kivymd.uix.list import OneLineIconListItem as ListItem
 from kivymd.uix.selectioncontrol import MDSwitch
 from kivymd.uix.textfield import MDTextField
 from kivymd_extensions.akivymd.uix.datepicker import AKDatePicker
-from kivymd.uix.list.list import MDList
+from kivymd.uix.list import MDList
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.label import MDLabel
 from kivymd.app import MDApp
@@ -20,19 +20,16 @@ from pytz import timezone
 # import webbrowser
 import csv
 
-
 SERVICE_NAME = u'{packagename}.Service{servicename}'.format(
     packagename=u'org.tanimsk.earthquake_predictor',
     servicename=u'Notify'
 )
-
 
 BASIC_RULES = '''[color=#2a2a2a]1. This app only shows the prediction of the highest earthquake of any date of the year 2022 but it is impossible to say where the earthquake will occure. 
 The earthquake can occure in any place of the world.
 
 2. If a prediction of any date becomes incorrect and a big earthquake occures than their will be a possibility of bigger 
 earthquakes in the next 4 to 5 days.[/color]'''
-
 
 GENERAL_TIPS = '''[color=#2a2a2a]1.Drop down; take cover under a desk or table and hold on.
 
@@ -93,7 +90,7 @@ class MainApp(MDApp):
     severe_rating_label = None
     sound = None
 
-    btn_color = (149/255, 57/255, 106/255, 1)
+    btn_color = (149 / 255, 57 / 255, 106 / 255, 1)
 
     store = JsonStore('data.json')
 
@@ -114,12 +111,12 @@ class MainApp(MDApp):
         request_permissions([Permission.WRITE_EXTERNAL_STORAGE, Permission.FOREGROUND_SERVICE,
                              Permission.READ_EXTERNAL_STORAGE], callback)
 
-# ----------- WEB BROWSER ---------------                                                                     
+    # ----------- WEB BROWSER ---------------
     # def load_url(self):
     #     print("printef")
     #     webbrowser.open("google.com")
 
-# ----------- Android Services ------------
+    # ----------- Android Services ------------
 
     def start_service(self):
 
@@ -138,7 +135,7 @@ class MainApp(MDApp):
                 self.service.stop(self.mActivity)
             self.service = None
 
-# ----------- Main Screen ------------
+    # ----------- Main Screen ------------
 
     def main_screen(self):
         self.screen_main = Screen(name="main_scrn")
@@ -195,18 +192,16 @@ class MainApp(MDApp):
         self.screen_main.add_widget(tips_btn)
         self.screen_main.add_widget(settings_btn)
 
-
-# ------------- Query Screen -------------
+    # ------------- Query Screen -------------
 
     def date_selected(self, value):
 
         data_frame = csv.reader(
             open('./files/records.csv', "r"), delimiter=",")
 
-
         if value:
 
-            Day = str(int(value.strftime('%d'))-self.store.get('data')['Time'])
+            Day = str(int(value.strftime('%d')) - self.store.get('data')['Time'])
 
             new_date = f"{value.strftime('%Y-%m')}-{Day.zfill(2)}"
 
@@ -223,7 +218,7 @@ class MainApp(MDApp):
 
         minor_ratings = ""
         severe_ratings = ""
-        
+
         self.selected_date.text = f"[size=15sp]Date Selected[/size]\n[size=25sp]{value}[/size]"
 
         if minor_ratings != "":
@@ -239,11 +234,11 @@ class MainApp(MDApp):
     date_picker = None
 
     def open_picker(self, *kwargs):
-        date=datetime.now()
+        date = datetime.now()
 
-        self.date_picker._day_title=date.strftime("%d")
-        self.date_picker._month_title=date.strftime("%B")
-        self.date_picker._year_title=date.strftime("%Y")
+        self.date_picker._day_title = date.strftime("%d")
+        self.date_picker._month_title = date.strftime("%B")
+        self.date_picker._year_title = date.strftime("%Y")
 
         self.date_picker.open()
 
@@ -272,15 +267,19 @@ class MainApp(MDApp):
         )
 
         info_btn = MDIconButton(
-            icon="information", pos_hint={"y": 0.75, "center_x": 0.2},  icon_size="50sp",
-            theme_icon_color='Custom', icon_color=self.btn_color,
+            icon="information", pos_hint={"y": 0.75, "center_x": 0.2},
+            # icon_size="50sp",
+            # theme_icon_color='Custom', 
+            # icon_color=self.btn_color,
             on_release=dialog_info.open,
             on_press=self.click_sound
         )
 
         rules_btn = MDIconButton(
-            icon="book-open", pos_hint={"y": 0.75, "center_x": 0.8},  icon_size="50sp",
-            theme_icon_color='Custom', icon_color=self.btn_color,
+            icon="book-open", pos_hint={"y": 0.75, "center_x": 0.8},
+            # icon_size="50sp",
+            # theme_icon_color='Custom', 
+            # icon_color=self.btn_color,
             on_release=dialog_rules.open,
             on_press=self.click_sound
         )
@@ -304,7 +303,8 @@ class MainApp(MDApp):
         )
 
         back_btn = MDIconButton(
-            icon="arrow-left-drop-circle", pos_hint={"y": 0, "x": 0},  icon_size="50sp",
+            icon="arrow-left-drop-circle", pos_hint={"y": 0, "x": 0},
+            # icon_size="50sp",
             on_release=lambda *args: self.sm.switch_to(
                 self.screen_main, direction='right'),
             on_press=self.click_sound
@@ -319,9 +319,7 @@ class MainApp(MDApp):
         self.screen_query.add_widget(self.severe_rating_label)
         self.screen_query.add_widget(back_btn)
 
-
-# ------------ Settings Screen ---------------
-
+    # ------------ Settings Screen ---------------
 
     def settings_save(self, sound, notification):
         self.click_sound()
@@ -333,7 +331,6 @@ class MainApp(MDApp):
             self.stop_service()
         elif self.service is None:
             self.start_service()
-        
 
     def settings_screen(self):
         self.screen_settings = Screen(name="settings_scrn")
@@ -366,7 +363,8 @@ class MainApp(MDApp):
         )
 
         back_btn = MDIconButton(
-            icon="arrow-left-drop-circle", pos_hint={"y": 0, "x": 0}, icon_size="50sp",
+            icon="arrow-left-drop-circle", pos_hint={"y": 0, "x": 0},
+            # icon_size="50sp",
             on_release=lambda *args: self.sm.switch_to(
                 self.screen_main, direction='right'),
             on_press=lambda *args: self.settings_save(
@@ -380,7 +378,7 @@ class MainApp(MDApp):
         self.screen_settings.add_widget(notification_label)
         self.screen_settings.add_widget(sound_label)
 
-# --------------- TIPS Screen -------------------
+    # --------------- TIPS Screen -------------------
 
     def tips_screen(self):
         self.screen_tips = Screen(name="tips_scrn")
@@ -414,30 +412,35 @@ class MainApp(MDApp):
         general_tips = MDRectangleFlatIconButton(
             text="[b]General Tips[/b]", pos_hint={"center_y": .65, "center_x": .5},
             icon='information-outline', text_color=self.btn_color, line_color=self.btn_color,
-            theme_icon_color="Custom", icon_color=self.btn_color,
+            # theme_icon_color="Custom",
+            icon_color=self.btn_color,
             on_release=general_tips_txt.open, on_press=self.click_sound
         )
         before_eq = MDRectangleFlatIconButton(
             text="[b]Before an Earthquake[/b]", pos_hint={"center_y": .55, "center_x": .5},
-            text_color=self.btn_color, line_color=self.btn_color, theme_icon_color="Custom",
+            text_color=self.btn_color, line_color=self.btn_color,
+            # theme_icon_color="Custom",
             icon_color=self.btn_color, on_release=before_eq_txt.open, icon="walk",
             on_press=self.click_sound
         )
         during_eq = MDRectangleFlatIconButton(
             text="[b]During an Earthquake[/b]", pos_hint={"center_y": .45, "center_x": .5},
-            text_color=self.btn_color, line_color=self.btn_color, theme_icon_color="Custom",
+            text_color=self.btn_color, line_color=self.btn_color,
+            # theme_icon_color="Custom",
             icon_color=self.btn_color, on_release=during_eq_txt.open, icon="run",
             on_press=self.click_sound
         )
         after_eq = MDRectangleFlatIconButton(
             text="[b]After an Earthquake[/b]", pos_hint={"center_y": .35, "center_x": .5},
-            text_color=self.btn_color, line_color=self.btn_color, theme_icon_color="Custom",
+            text_color=self.btn_color, line_color=self.btn_color,
+            # theme_icon_color="Custom",
             icon_color=self.btn_color, on_release=after_eq_txt.open, icon="human-male",
             on_press=self.click_sound
         )
 
         back_btn = MDIconButton(
-            icon="arrow-left-drop-circle", pos_hint={"y": 0, "x": 0}, icon_size="50sp",
+            icon="arrow-left-drop-circle", pos_hint={"y": 0, "x": 0},
+            # icon_size="50sp",
             on_release=lambda *args: self.sm.switch_to(
                 self.screen_main, direction='right'),
             on_press=self.click_sound
@@ -451,16 +454,14 @@ class MainApp(MDApp):
         self.screen_tips.add_widget(screen_name)
         self.screen_tips.add_widget(back_btn)
 
-
-# -------------- Region Selection ---------------
-
+    # -------------- Region Selection ---------------
 
     def save_data(self, date):
         date = int(date)
-        
+
         dateBD = int(datetime.now(timezone('UTC')).astimezone(
-            timezone('Europe/London')).strftime("%d")) 
-        
+            timezone('Europe/London')).strftime("%d"))
+
         delta = dateBD - date
 
         self.store.put('data', Sound=True, Notification=True, Time=delta)
@@ -468,7 +469,7 @@ class MainApp(MDApp):
         self.click_sound()
 
         with open("./files/today_date.txt", 'w') as f:
-            f.write(str(dateBD-1).zfill(2))
+            f.write(str(dateBD - 1).zfill(2))
 
         if platform == 'android':
             self.start_service()
@@ -510,9 +511,7 @@ class MainApp(MDApp):
         self.screen_country_selection.add_widget(location_stat)
         self.screen_country_selection.add_widget(location_confirm_btn)
 
-
-# ----------- Clicked Sound --------------
-
+    # ----------- Clicked Sound --------------
 
     def click_sound(self, *args):
         if self.store.get('data')['Sound']:
@@ -546,7 +545,6 @@ class MainApp(MDApp):
 
 
 MainApp().run()
-
 
 # search_bar = MDTextField(
 #     icon_right='magnify', size_hint=(.8, 1),
